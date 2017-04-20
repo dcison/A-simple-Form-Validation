@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta id="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {
+            height: 30px;
+            text-align: left;
+        }
+        
+        label {
+            min-width: 80px;
+            margin-left: 20px;
+            display: inline-block;
+        }
+        
+        .high {
+            color: red;
+        }
+        
+        .Error {
+            color: red;
+        }
+        
+        .Success {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="" method="post">
+        <div class="box">
+            <label for="name">Name:</label>
+            <input type="text" id="name" value="" class="required" />
+        </div>
+        <div class="box">
+            <label for="email">Email:</label>
+            <input type="text" id="email" value="" class="required" />
+        </div>
+        <div class="box">
+            <label for="Message">Message:</label>
+            <input type="text" id="message" value="" />
+        </div>
+        <div>
+            <input type="submit" id="submit" value="submit"  style="margin-left:50px;" />
+            <input type="reset" id="reset" value="reset" id="res" />
+        </div>
+    </form>
+    <script type="text/javascript" src="./JQuery.js">
+
+    </script>
+    <script type="text/javascript">
+        $("input.required").each(function () {
+            //创建元素
+            var $required = $("<strong class='high'>*</strong>");
+            //将它追加到文档中
+            $(this).parent().append($required);
+        });
+        $("input").blur(function () {
+            
+            var $parent = $(this).parent();
+            //this现在指input的框，其parent是div
+            if ($(this).is("#name")) {//对id为name的输入框操作
+                if ($.trim(this.value).length < 6) {
+                    //只给姓名的输入框的父元素（div)添加一次Error提示
+                    if (!($parent.children("span").is('.Error'))) {
+                        if($parent.children("span").length>0)
+                        {//如果从正确名字变回不够字数时，去掉正确的提示
+                            $parent.children("span").remove();
+                            var $required = $("<strong class='high'>*</strong>");            
+                            $(this).parent().append($required);
+                        }
+                        var errorMsg = " 请输入至少6位的名称！";
+                        $parent.append("<span class='Error'>" + errorMsg + "</span>");
+                    }
+                }
+                else {
+                    //只给姓名的输入框的父元素（div)添加一次Success提示
+                    if (!($parent.children("span").is('.Success'))) {
+                        var SuccessMsg = "输入正确";
+                        $parent.find(".high").remove();
+                        $parent.find(".Error").remove();
+                        $parent.append("<span class='Success'>" + SuccessMsg + "</span>");
+                    }
+                }
+            };
+            if ($(this).is("#email")) {
+                var reg = /^([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\-|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/gi;
+                if ($.trim(this.value) == "" || !reg.test($.trim(this.value))) {
+                    if (!($parent.children("span").is('.Error'))) {
+                        if($parent.children("span").length>0)
+                        {
+                            $parent.children("span").remove();                            
+                            var $required = $("<strong class='high'>*</strong>");            
+                            $(this).parent().append($required);
+                        }
+                        var noMsg = " 请输入正确邮箱！";
+                        $parent.append("<span class='Error'>" + noMsg + "</span>");
+                    }
+                }
+                else {
+                    if (!($parent.children("span").is('.Success'))) {
+                        var SuccessMsg = "输入正确";
+                        $parent.find(".high").remove();
+                        $parent.find(".Error").remove();
+                        $parent.append("<span class='Success'>" + SuccessMsg + "</span>");
+                    }
+                }
+            };            
+        }); 
+        $('#submit').click(function(event){
+            if($(".high").length>0){
+                alert("请确定必填信息填完");
+            }
+            else{
+                alert("提交成功");
+            }
+            event.preventDefault();
+        });
+        $("#reset").click(function(){
+           /* $("input.required").each(function () {
+         if($(this).parent().children("span").length>0 || $(this).parent().children("strong").length>0){
+                $(this).parent().children("span").remove();
+                $(this).parent().children("strong").remove();    
+            }*/
+            $("input.required").each(function (){
+                $(this).parent().children("span").remove();
+                $(this).parent().children("strong").remove();
+                var $required = $("<strong class='high'>*</strong>");
+                $(this).parent().append($required);
+            })
+            
+        });
+    </script>
+</body>
+
+</html>
